@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ErrorPageComponent } from './shared/error-page/error-page.component';
+import { AuthGuard } from './auth/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -9,13 +10,16 @@ const routes: Routes = [
     // Se importa el modulo, no el routing module respectivo, esto porque ya el modulo lo tiene importado
     loadChildren: () => import('./auth/auth.module')
                         .then( m => m.AuthModule)
+    
   },
   {
     // Este es el path que se va a definir en el principal para obtener todo el modulo/rutas de heroes
     path: 'heroes',
     // Se importa el modulo, no el routing module respectivo, esto porque ya el modulo lo tiene importado
     loadChildren: () => import('./heroes/heroes.module')
-                        .then( m => m.HeroesModule)
+                        .then( m => m.HeroesModule),
+    canLoad: [ AuthGuard ],
+    canActivate: [ AuthGuard ]
   },
   {
     path: '404',
